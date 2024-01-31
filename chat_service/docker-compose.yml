@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  sentinel:
+    image: bitnami/redis-sentinel:latest
+    ports:
+      - "26379:26379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_MASTER_NAME=mymaster
+      - REDIS_MASTER_HOST=127.0.0.1
+      - REDIS_MASTER_PORT=6379
+    volumes:
+      - ./docker/redis/sentinel.conf:/etc/sentinel.conf
+    depends_on:
+      - redis-master
+    networks:
+      - chat
+
+  redis-master:
+    image: bitnami/redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - chat
+
+  redis-replica:
+    image: bitnami/redis:latest
+    ports:
+      - "6380:6379"
+    depends_on:
+      - redis-master
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MASTER=mymaster
+      - REPLICA-PORT=6380
+      - REPLICA-ADDR=127.0.0.1:6379
+    networks:
+      - chat
+  mongodb:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongodb-data:/data/db
+      - ./docker/mongo/init-scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  mongodb-data:
+  redis-data:
+
+networks:
+  chat:

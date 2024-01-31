@@ -1,0 +1,85 @@
+definitions:
+  dto.CreateUserRequestDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.CreateUserResponseDto:
+    properties:
+      links:
+        additionalProperties:
+          type: string
+        type: object
+      user_id:
+        type: integer
+    type: object
+  dto.GetUserResponseDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/users:
+    post:
+      description: Create a new user with the provided details
+      operationId: create-user
+      parameters:
+      - description: User creation request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CreateUserResponseDto'
+        "400":
+          description: Bad Request
+          schema: {}
+        "409":
+          description: Conflict - User already exists
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Create a new user
+  /api/v1/users/{id}:
+    get:
+      description: Get user information by ID
+      operationId: get-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetUserResponseDto'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get user by ID
+swagger: "2.0"

@@ -1,0 +1,30 @@
+###
+# CREATE USER
+POST {{host}}/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "John",
+  "email": "john@example.com"
+}
+
+###
+# Response: 201 CREATED
+HTTP/1.1 201 CREATED
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "links": {
+    "_self": "{{host}}/api/v1/user/1"
+  }
+}
+
+###
+# Response: 409 Conflict (Duplicate User)
+HTTP/1.1 409 Conflict
+Content-Type: application/json
+
+{
+  "error_message": "User already exists with email: john@example.com"
+}
