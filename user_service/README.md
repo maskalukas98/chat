@@ -7,22 +7,22 @@
 
 
 ## ABOUT
-**migration** <br>
+#### migration
 make migrate-up
 - It should be executed after the PostgreSQL container is created.
 
-**swagger** <br>
+#### swagger
 http://localhost:8080/swagger/index.html
 
 ## TESTS
-**unit tests** <br>
+#### unit tests
 make unit-test
 
-**repository tests** <br>
+#### repository tests
 make repository-test  <br>
 
 
-**api tests** <br>
+#### api tests
 make api-test  <br>
 - Docker-compose and http server must be running.
 
